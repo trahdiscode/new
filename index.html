@@ -3,13 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trahdis - Coming Soon</title>
-
-    <!-- This line loads the "Montserrat" font directly from Google's free font library -->
-    <!-- We're asking for weight 300 (light) and 500 (medium) specifically -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+    <title>Trahdis</title>
 
     <style>
         * {
@@ -20,37 +14,27 @@
 
         body {
             background-color: #000000;
-            color: #ffffff;
-
-            /* Now we tell the browser to actually USE the Montserrat font we just loaded above */
-            font-family: 'Montserrat', sans-serif;
-
+            
             height: 100vh;
             width: 100vw;
-
+            
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .coming-soon-text {
-            font-size: 3rem;
-            font-weight: 300; /* the "light" weight we loaded — looks elegant, not heavy/bold */
-            letter-spacing: 4px; /* slightly wider spacing than before, looks more premium */
-            text-transform: uppercase; /* makes it ALL CAPS, common in premium branding pages */
-        }
-
-        @media (max-width: 600px) {
-            .coming-soon-text {
-                font-size: 1.8rem;
-                letter-spacing: 2px;
-            }
+        /* This controls the image's max size so it doesn't overflow on small screens */
+        .center-image {
+            max-width: 80%; /* image won't stretch past 80% of screen width */
+            max-height: 80vh; /* or past 80% of screen height */
+            object-fit: contain; /* keeps the image's original proportions, no stretching/distortion */
         }
     </style>
 </head>
 <body>
 
-    <div class="coming-soon-text">Coming Soon...</div>
+    <!-- Replace "image.png" below with your actual image's filename, exactly as uploaded -->
+    <img src="tr1.png" alt="Trahdis" class="center-image">
 
 </body>
 </html>
