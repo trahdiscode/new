@@ -4,37 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trahdis</title>
-
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             background-color: #000000;
-            
+            color: #ffffff;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
             height: 100vh;
             width: 100vw;
-            
+
+            position: relative; /* needed so the button positions correctly */
+
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* This controls the image's max size so it doesn't overflow on small screens */
-        .center-image {
-            max-width: 80%; /* image won't stretch past 80% of screen width */
-            max-height: 80vh; /* or past 80% of screen height */
-            object-fit: contain; /* keeps the image's original proportions, no stretching/distortion */
+        /* ParkOS link button styling */
+        .parkos-btn {
+            position: absolute;
+            bottom: 40px;
+            color: #ffffff;
+            text-decoration: none;
+            border: 1px solid #ffffff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .parkos-btn:hover {
+            background-color: #ffffff;
+            color: #000000;
         }
     </style>
 </head>
 <body>
 
-    <!-- Replace "image.png" below with your actual image's filename, exactly as uploaded -->
-    <img src="tr1.png" alt="Trahdis" class="center-image">
+    <a href="https://parkos.streamlit.app" target="_blank" class="parkos-btn">
+        View ParkOS →
+    </a>
 
 </body>
 </html>
