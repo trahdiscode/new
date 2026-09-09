@@ -201,6 +201,10 @@
             } else {
                 addLine("command not found: " + cmd + " (try 'help')");
             }
+            if (lower === 'oomb' || lower === 'umb' || lower === 'oomf') {
+                addLine("sybau nga");
+                return;
+            }
         }
 
         hiddenInput.addEventListener('input', () => {
