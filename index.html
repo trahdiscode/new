@@ -81,16 +81,40 @@
         const terminal = document.getElementById('terminal');
 
         const responses = {
-            help: "Available commands: whoami, sudo reveal-identity, status, projects, contact, joke, clear, help",
+            help: "Available commands: whoami, sudo reveal-identity, status, projects, contact, joke, hello, clear, help",
             whoami: "nice try.",
             "sudo reveal-identity": "Permission denied: you are not root here.",
             status: "Building something. Ask again later.",
             projects: "Classified. Check back after launch.",
             contact: "Still deciding if you deserve that. Try again later.",
-            joke: "Why do programmers prefer dark mode? Because light attracts bugs.",
             ls: "you.txt  regrets.log  README (empty)",
             pwd: "/nowhere/near/you",
         };
+
+        const jokes = [
+            "Why do programmers prefer dark mode? Because light attracts bugs.",
+            "There are 10 types of people: those who understand binary and those who don't.",
+            "A SQL query walks into a bar, walks up to two tables and asks: 'Can I join you?'",
+            "Why do Java developers wear glasses? Because they don't C#.",
+            "I told a joke about UDP. You might not get it.",
+            "!false — it's funny because it's true.",
+            "Why was the JavaScript developer sad? Because they didn't Node how to Express themselves.",
+            "In order to understand recursion, you must first understand recursion.",
+            "A programmer's wife says 'buy a loaf of bread, and if they have eggs, get a dozen.' He came home with 12 loaves of bread.",
+            "Why do programmers hate nature? Too many bugs and no debugger."
+        ];
+
+        const helloReplies = [
+            "Hello. This terminal was expecting someone taller.",
+            "Hey. State your business, or don't — I'm not paid enough to care.",
+            "Greetings, visitor. Root access still not included.",
+            "Hi there. Yes, I'm judging your typing speed.",
+            "Well hello. This is the part where I pretend to be helpful."
+        ];
+
+        function randomFrom(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
 
         function addLine(text) {
             const div = document.createElement('div');
@@ -107,6 +131,14 @@
             const lower = cmd.toLowerCase();
             if (lower === 'clear') {
                 output.innerHTML = '';
+                return;
+            }
+            if (lower === 'joke') {
+                addLine(randomFrom(jokes));
+                return;
+            }
+            if (lower === 'hello' || lower === 'hi' || lower === 'hey') {
+                addLine(randomFrom(helloReplies));
                 return;
             }
             if (responses.hasOwnProperty(lower)) {
