@@ -12,53 +12,119 @@
         }
         body {
             background-color: #000000;
-            color: #ffffff;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-
+            color: #00ff41;
+            font-family: 'Courier New', Courier, monospace;
             height: 100vh;
             width: 100vw;
-
-            position: relative; /* needed so the button positions correctly */
-
             display: flex;
             align-items: center;
             justify-content: center;
         }
-
-        .center-image {
-            max-width: 80%;
-            max-height: 80vh;
-            object-fit: contain;
+        .terminal {
+            width: 90%;
+            max-width: 700px;
+            height: 60vh;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            background: #0a0a0a;
+            box-shadow: 0 0 20px rgba(0,255,65,0.08);
         }
-
-        /* ParkOS link button styling */
-        .parkos-btn {
-            position: absolute;
-            bottom: 40px;
-            color: #ffffff;
-            text-decoration: none;
-            border: 1px solid #ffffff;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
+        .output {
+            flex: 1;
+            overflow-y: auto;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
         }
-
-        .parkos-btn:hover {
-            background-color: #ffffff;
-            color: #000000;
+        .output .line { margin-bottom: 4px; }
+        .prompt-line {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
         }
+        .prompt-line span.prefix {
+            margin-right: 6px;
+            color: #00ff41;
+        }
+        #cmd-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #00ff41;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+        }
+        ::selection { background: #00ff41; color: #000; }
+        .output::-webkit-scrollbar { width: 6px; }
+        .output::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
     </style>
 </head>
 <body>
 
-    <img src="tr1.png" alt="Trahdis" class="center-image">
+    <div class="terminal" id="terminal">
+        <div class="output" id="output">
+            <div class="line">Welcome. This terminal has opinions. Type 'help' to begin.</div>
+        </div>
+        <div class="prompt-line">
+            <span class="prefix">visitor@trahdis:~$</span>
+            <input type="text" id="cmd-input" autofocus autocomplete="off" spellcheck="false">
+        </div>
+    </div>
 
-    <a href="https://parknova.streamlit.app" target="_blank" class="parkos-btn">
-        View ParkOS →
-    </a>
+    <script>
+        const output = document.getElementById('output');
+        const input = document.getElementById('cmd-input');
+        const terminal = document.getElementById('terminal');
+
+        const responses = {
+            help: "Available commands: whoami, sudo reveal-identity, status, projects, contact, joke, clear, help",
+            whoami: "nice try.",
+            "sudo reveal-identity": "Permission denied: you are not root here.",
+            status: "Building something. Ask again later.",
+            projects: "Classified. Check back after launch.",
+            contact: "Still deciding if you deserve that. Try again later.",
+            joke: "Why do programmers prefer dark mode? Because light attracts bugs.",
+            ls: "you.txt  regrets.log  README (empty)",
+            pwd: "/nowhere/near/you",
+        };
+
+        function addLine(text) {
+            const div = document.createElement('div');
+            div.className = 'line';
+            div.textContent = text;
+            output.appendChild(div);
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function handleCommand(raw) {
+            const cmd = raw.trim();
+            addLine('visitor@trahdis:~$ ' + cmd);
+            if (cmd === '') return;
+            const lower = cmd.toLowerCase();
+            if (lower === 'clear') {
+                output.innerHTML = '';
+                return;
+            }
+            if (responses.hasOwnProperty(lower)) {
+                addLine(responses[lower]);
+            } else {
+                addLine("command not found: " + cmd + " (try 'help')");
+            }
+        }
+
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                handleCommand(input.value);
+                input.value = '';
+            }
+        });
+
+        terminal.addEventListener('click', () => input.focus());
+    </script>
 
 </body>
 </html>
