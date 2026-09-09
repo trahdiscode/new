@@ -140,6 +140,9 @@
             contact: "Still deciding if you deserve that. Try again later.",
             ls: "you.txt  regrets.log  README (empty)",
             pwd: "/nowhere/near/you",
+            oomb: "nee etha naaye ?"
+            
+            
         };
 
         const jokes = [
@@ -200,10 +203,6 @@
                 addLine(responses[lower]);
             } else {
                 addLine("command not found: " + cmd + " (try 'help')");
-            }
-            if (lower === 'oomb' || lower === 'umb' || lower === 'oomf') {
-                addLine("sybau nga");
-                return;
             }
         }
 
