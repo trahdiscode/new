@@ -10,26 +10,55 @@
             padding: 0;
             box-sizing: border-box;
         }
+        html, body {
+            height: 100%;
+            width: 100%;
+            background-color: #0a0a0a;
+        }
         body {
-            background-color: #000000;
             color: #00ff41;
             font-family: 'Courier New', Courier, monospace;
-            height: 100vh;
-            width: 100vw;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Title bar */
+        .titlebar {
+            height: 34px;
+            background: #1a1a1a;
+            border-bottom: 1px solid #262626;
             display: flex;
             align-items: center;
-            justify-content: center;
+            padding: 0 12px;
+            flex-shrink: 0;
         }
+        .dots {
+            display: flex;
+            gap: 8px;
+            margin-right: 14px;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+        .titlebar .filename {
+            color: #777;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            flex: 1;
+            text-align: center;
+            margin-right: 60px; /* offset so it centers relative to full bar, not remaining space */
+        }
+
+        /* Terminal body */
         .terminal {
-            width: 90%;
-            max-width: 700px;
-            height: 60vh;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 20px;
-            background: #0a0a0a;
-            box-shadow: 0 0 20px rgba(0,255,65,0.08);
+            flex: 1;
             overflow-y: auto;
+            padding: 20px 24px;
             font-size: 0.95rem;
             line-height: 1.6;
             cursor: text;
@@ -65,11 +94,20 @@
             width: 0;
             height: 0;
         }
-        .terminal::-webkit-scrollbar { width: 6px; }
-        .terminal::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        .terminal::-webkit-scrollbar { width: 8px; }
+        .terminal::-webkit-scrollbar-thumb { background: #262626; border-radius: 4px; }
     </style>
 </head>
 <body>
+
+    <div class="titlebar">
+        <div class="dots">
+            <div class="dot red"></div>
+            <div class="dot yellow"></div>
+            <div class="dot green"></div>
+        </div>
+        <div class="filename">zsh — 80×24</div>
+    </div>
 
     <div class="terminal" id="terminal">
         <div class="line">Welcome. This terminal has opinions. Type 'help' to begin.</div>
