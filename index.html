@@ -131,6 +131,14 @@
         const hiddenInput = document.getElementById('hidden-input');
         const activeLine = document.querySelector('.active-line');
 
+        // Commands that navigate to a subdomain instead of printing a line.
+        // Add more subdomains here later by adding another "lower === '...'" entry
+        // in handleCommand, following the same pattern as parkos/deadline below.
+        const subdomainRedirects = {
+            parkos: 'https://parkos.trahdis.com',
+            deadline: 'https://deadline.trahdis.com',
+        };
+
         const responses = {
             help: "Available commands: whoami, sudo reveal-identity, status, projects, contact, joke, hello, clear, help",
             whoami: "nice try.",
@@ -199,6 +207,13 @@
             }
             if (lower === 'hello' || lower === 'hi' || lower === 'hey') {
                 addLine(randomFrom(helloReplies));
+                return;
+            }
+            if (subdomainRedirects.hasOwnProperty(lower)) {
+                addLine('Redirecting to ' + subdomainRedirects[lower] + ' ...');
+                setTimeout(() => {
+                    window.location.href = subdomainRedirects[lower];
+                }, 600);
                 return;
             }
             if (responses.hasOwnProperty(lower)) {
