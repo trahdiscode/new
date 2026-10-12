@@ -1,244 +1,309 @@
 <!DOCTYPE html>
+<!--
+  TRAHDIS PORTFOLIO - single file website (minimalist style)
+  How to use: upload this file as "index.html" to your hosting for trahdis.com.
+  Everything (HTML, CSS, JavaScript) is in this one file, so nothing else is needed.
+  Search for "EDIT:" to find the places you should change.
+-->
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trahdis</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        html, body {
-            height: 100%;
-            width: 100%;
-            background-color: #0a0a0a;
-        }
-        body {
-            color: #00ff41;
-            font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            flex-direction: column;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TRAHDIS | Sidharth R - CSE Student and Builder</title>
+  <meta name="description" content="Portfolio of Sidharth R (TRAHDIS), a Computer Science Engineering student building systems and app projects.">
 
-        /* Title bar */
-        .titlebar {
-            height: 34px;
-            background: #1a1a1a;
-            border-bottom: 1px solid #262626;
-            display: flex;
-            align-items: center;
-            padding: 0 12px;
-            flex-shrink: 0;
-        }
-        .dots {
-            display: flex;
-            gap: 8px;
-            margin-right: 14px;
-        }
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-        .dot.red { background: #ff5f56; }
-        .dot.yellow { background: #ffbd2e; }
-        .dot.green { background: #27c93f; }
-        .titlebar .filename {
-            color: #777;
-            font-size: 0.8rem;
-            letter-spacing: 0.5px;
-            flex: 1;
-            text-align: center;
-            margin-right: 60px; /* offset so it centers relative to full bar, not remaining space */
-        }
+  <style>
+    /* ---------- 1. COLOUR VARIABLES ----------
+       Minimalism = very few colours. Just black, white and two greys.
+       Change a colour here and it changes everywhere on the page. */
+    :root {
+      --bg: #ffffff;       /* page background */
+      --text: #111111;     /* main text, buttons, lines that need emphasis */
+      --muted: #666666;    /* softer text */
+      --line: #e6e6e6;     /* hairline dividers */
+    }
 
-        /* Terminal body */
-        .terminal {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px 24px;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            cursor: text;
-        }
-        .line { white-space: pre-wrap; word-break: break-word; }
-        .active-line {
-            display: flex;
-        }
-        .active-line .prefix {
-            white-space: pre;
-            margin-right: 6px;
-        }
-        .typed {
-            white-space: pre-wrap;
-            word-break: break-word;
-            direction: ltr;
-            unicode-bidi: plaintext;
-        }
-        .cursor {
-            display: inline-block;
-            width: 8px;
-            height: 1.1em;
-            background: #00ff41;
-            margin-left: 1px;
-            animation: blink 1s step-start infinite;
-            vertical-align: text-bottom;
-        }
-        @keyframes blink {
-            50% { opacity: 0; }
-        }
-        #hidden-input {
-            position: absolute;
-            top: 0;
-            left: -9999px;
-            opacity: 0;
-            pointer-events: none;
-            width: 200px;
-            height: 20px;
-            direction: ltr;
-            unicode-bidi: plaintext;
-            text-align: left;
-        }
-        .terminal::-webkit-scrollbar { width: 8px; }
-        .terminal::-webkit-scrollbar-thumb { background: #262626; border-radius: 4px; }
-    </style>
+    /* ---------- 2. BASIC RESET ---------- */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--text); text-decoration: none; }
+    a:hover { text-decoration: underline; text-underline-offset: 4px; }
+    a:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+
+    /* A narrow centred column keeps lines short and easy to read */
+    .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+    /* ---------- 3. NAVIGATION BAR ---------- */
+    nav { position: sticky; top: 0; z-index: 10; background: var(--bg); }
+    nav .container {
+      display: flex; justify-content: space-between; align-items: center;
+      height: 72px;
+    }
+    .logo { font-weight: 700; letter-spacing: 3px; font-size: 0.9rem; }
+    .logo:hover { text-decoration: none; }
+    nav ul { list-style: none; display: flex; gap: 28px; }
+    nav ul a { color: var(--muted); font-size: 0.88rem; }
+    nav ul a:hover { color: var(--text); text-decoration: none; }
+
+    /* ---------- 4. HERO (first screen) ---------- */
+    .hero { padding: 120px 0 90px; }
+    .hero .tag {
+      display: block; margin-bottom: 28px;
+      color: var(--muted); font-size: 0.8rem;
+      letter-spacing: 2px; text-transform: uppercase;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 6vw, 3.6rem);
+      line-height: 1.15; font-weight: 600; letter-spacing: -0.03em;
+    }
+    .hero p { color: var(--muted); max-width: 520px; margin: 28px 0 40px; font-size: 1.05rem; }
+
+    /* Buttons: flat, square, black and white only */
+    .btn {
+      display: inline-block; padding: 12px 26px; margin: 0 12px 12px 0;
+      border: 1px solid var(--text); font-size: 0.9rem; font-weight: 500;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn.primary { background: var(--text); color: var(--bg); }
+    .btn.ghost { background: transparent; color: var(--text); }
+    .btn:hover { text-decoration: none; }
+    .btn.primary:hover { background: var(--bg); color: var(--text); }
+    .btn.ghost:hover { background: var(--text); color: var(--bg); }
+
+    /* ---------- 5. GENERAL SECTION STYLES ---------- */
+    section { padding: 80px 0; border-top: 1px solid var(--line); }
+    section h2 {
+      font-size: 0.8rem; font-weight: 600; margin-bottom: 8px;
+      letter-spacing: 2px; text-transform: uppercase;
+    }
+    section .sub { color: var(--muted); margin-bottom: 44px; }
+
+    /* ---------- 6. ABOUT ---------- */
+    .about-grid { display: grid; grid-template-columns: 1fr; gap: 40px; }
+    .about-grid p { color: var(--muted); margin-bottom: 18px; }
+    .facts { list-style: none; }
+    .facts li { padding: 14px 0; border-top: 1px solid var(--line); font-size: 0.95rem; }
+    .facts li:last-child { border-bottom: 1px solid var(--line); }
+    .facts b {
+      display: block; font-weight: 500; color: var(--muted);
+      font-size: 0.72rem; letter-spacing: 1.5px; text-transform: uppercase;
+    }
+
+    /* ---------- 7. PROJECTS (a simple list, not boxes) ---------- */
+    .grid { display: block; }
+    .card { padding: 32px 0; border-top: 1px solid var(--line); }
+    .card:last-child { border-bottom: 1px solid var(--line); }
+    .card h3 { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 8px; }
+    .card p { color: var(--muted); font-size: 0.97rem; margin-bottom: 14px; max-width: 560px; }
+    .status {
+      font-size: 0.72rem; color: var(--muted); margin-bottom: 6px;
+      letter-spacing: 1.5px; text-transform: uppercase;
+    }
+    .card-link { display: inline-block; margin-top: 6px; font-size: 0.92rem; font-weight: 500; border-bottom: 1px solid var(--text); }
+    .card-link:hover { text-decoration: none; opacity: 0.6; }
+
+    /* Tags are plain text separated by slashes */
+    .chips span { font-size: 0.82rem; color: var(--muted); }
+    .chips span:not(:last-child)::after { content: " / "; margin: 0 6px; color: #bbbbbb; }
+
+    /* ---------- 8. SKILLS (two simple lists) ---------- */
+    .skill-box { padding: 24px 0; border-top: 1px solid var(--line); }
+    .skill-box:last-child { border-bottom: 1px solid var(--line); }
+    .skill-box h3 { margin-bottom: 8px; font-size: 0.8rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; }
+
+    /* ---------- 9. CONTACT AND FOOTER ---------- */
+    .contact-box p { color: var(--muted); margin: 6px 0 32px; max-width: 460px; }
+    .contact-box h2 { font-size: 1.8rem; font-weight: 600; letter-spacing: -0.02em; text-transform: none; margin-bottom: 8px; }
+    footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.82rem; border-top: 1px solid var(--line); }
+
+    /* ---------- 10. PHONE LAYOUT ---------- */
+    @media (max-width: 600px) {
+      nav .container { height: 64px; }
+      nav ul { gap: 16px; }
+      nav ul a { font-size: 0.8rem; }
+      .hero { padding: 72px 0 56px; }
+      section { padding: 56px 0; }
+    }
+
+    /* ---------- 11. FADE-IN ANIMATION (used by JavaScript below) ---------- */
+    .fade { opacity: 0; transform: translateY(12px); transition: opacity 0.7s, transform 0.7s; }
+    .fade.show { opacity: 1; transform: none; }
+
+    /* People who prefer less motion get no animation */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .fade { opacity: 1; transform: none; transition: none; }
+    }
+  </style>
 </head>
+
 <body>
 
-    <div class="titlebar">
-        <div class="dots">
-            <div class="dot red"></div>
-            <div class="dot yellow"></div>
-            <div class="dot green"></div>
-        </div>
-        <div class="filename">zsh — 80×24</div>
+  <!-- ================= NAVIGATION ================= -->
+  <nav>
+    <div class="container">
+      <a class="logo" href="#top">TRAHDIS</a>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
     </div>
+  </nav>
 
-    <div class="terminal" id="terminal">
-        <div class="line">Welcome. This terminal has opinions. Type 'help' to begin.</div>
-        <div class="active-line">
-            <span class="prefix">visitor@trahdis:~$</span>
-            <span class="typed" id="typed"></span><span class="cursor"></span>
-        </div>
-        <input type="text" id="hidden-input" autocomplete="off" spellcheck="false" autofocus>
+  <!-- ================= HERO ================= -->
+  <header class="hero" id="top">
+    <div class="container">
+      <span class="tag">CSE Undergraduate | Open to opportunities</span>
+      <h1>Hi, I'm Sidharth.<br>I build things close to the metal.</h1>
+      <p>
+        I am a Computer Science Engineering student who likes
+        low-level programming, data structures and turning ideas into working apps and systems.
+      </p>
+      <a class="btn primary" href="#projects">See my projects</a>
+      <a class="btn ghost" href="#contact">Get in touch</a>
     </div>
+  </header>
 
-    <script>
-        const terminal = document.getElementById('terminal');
-        const typed = document.getElementById('typed');
-        const hiddenInput = document.getElementById('hidden-input');
-        const activeLine = document.querySelector('.active-line');
+  <!-- ================= ABOUT ================= -->
+  <section id="about">
+    <div class="container fade">
+      <h2>About</h2>
+      <p class="sub">A quick introduction.</p>
 
-        // Commands that navigate to a subdomain instead of printing a line.
-        // Add more subdomains here later by adding another "lower === '...'" entry
-        // in handleCommand, following the same pattern as parkos/deadline below.
-        const subdomainRedirects = {
-            parkos: 'https://parkos.trahdis.com',
-            deadline: 'https://deadline.trahdis.com',
-        };
+      <div class="about-grid">
+        <div>
+          <p>
+            I am Sidharth R, a Computer Science Engineering undergraduate. My foundation is
+            C programming and systems-level thinking, and I keep coming back to it whenever
+            I learn something new.
+          </p>
+          <p>
+            My coursework covers C, C++ and Java, data structures and algorithms, operating
+            systems, discrete mathematics and linear algebra. Outside class I build real
+            projects so the theory has somewhere to land.
+          </p>
+        </div>
 
-        const responses = {
-            help: "Available commands: whoami, sudo reveal-identity, status, projects, contact, joke, hello, clear, help",
-            whoami: "nice try.",
-            "sudo reveal-identity": "Permission denied: you are not root here.",
-            status: "Building something. Ask again later.",
-            projects: "Classified. Check back after launch.",
-            contact: "Still deciding if you deserve that. Try again later.",
-            ls: "you.txt  regrets.log  README (empty)",
-            pwd: "/nowhere/near/you",
-            oomb: "nee etha naaye",
-            oomf: "nee etha naaye",
-            umb: "nee etha naaye",
-            
-            
-        };
+        <ul class="facts">
+          <li><b>Name</b>Sidharth R</li>
+          <li><b>Studying</b>Computer Science Engineering</li>
+          <li><b>Interests</b>Low-level programming, DSA</li>
+          <!-- EDIT: add your college name or year if you want -->
+        </ul>
+      </div>
+    </div>
+  </section>
 
-        const jokes = [
-            "Why do programmers prefer dark mode? Because light attracts bugs.",
-            "There are 10 types of people: those who understand binary and those who don't.",
-            "A SQL query walks into a bar, walks up to two tables and asks: 'Can I join you?'",
-            "Why do Java developers wear glasses? Because they don't C#.",
-            "I told a joke about UDP. You might not get it.",
-            "!false — it's funny because it's true.",
-            "Why was the JavaScript developer sad? Because they didn't Node how to Express themselves.",
-            "In order to understand recursion, you must first understand recursion.",
-            "A programmer's wife says 'buy a loaf of bread, and if they have eggs, get a dozen.' He came home with 12 loaves of bread.",
-            "Why do programmers hate nature? Too many bugs and no debugger."
-        ];
+  <!-- ================= PROJECTS ================= -->
+  <section id="projects">
+    <div class="container fade">
+      <h2>Projects</h2>
+      <p class="sub">Things I have built or am building.</p>
 
-        const helloReplies = [
-            "Hello. This terminal was expecting someone taller.",
-            "Hey. State your business, or don't — I'm not paid enough to care.",
-            "Greetings, visitor. Root access still not included.",
-            "Hi there. Yes, I'm judging your typing speed.",
-            "Well hello. This is the part where I pretend to be helpful."
-        ];
+      <div class="grid">
 
-        function randomFrom(arr) {
-            return arr[Math.floor(Math.random() * arr.length)];
+        <!-- Project 1: Deep Work app (first, so it shows above all others) -->
+        <div class="card">
+          <div class="status">Live on Google Play</div>
+          <h3>Deep Work</h3>
+          <p>A distraction-free focus timer for building unbreakable focus. Strict Mode actively blocks distracting apps until your session ends, and four themes (Espresso, Midnight, Blush, Aurora) make it a calm place to work.</p>
+          <div class="chips"><span>Android</span><span>Productivity</span><span>App blocking</span></div>
+          <a class="card-link" href="https://play.google.com/store/apps/details?id=com.deepworkapp" target="_blank" rel="noopener">Get it on Google Play &rarr;</a>
+        </div>
+
+        <!-- Project 2: ParkOS -->
+        <div class="card">
+          <div class="status">Built</div>
+          <h3>ParkOS</h3>
+          <p>A smart faculty parking portal for tracking and managing parking spaces.</p>
+          <div class="chips"><span>Web portal</span></div>
+          <!-- EDIT: add a link, for example <a href="https://github.com/...">View on GitHub</a> -->
+        </div>
+
+        <!-- Project 3: CivicCapture -->
+        <div class="card">
+          <div class="status">Course project</div>
+          <h3>CivicCapture</h3>
+          <p>A citizen reporting app for a database systems course. Reports must be captured live (no uploads), and deleting a report is gated by the government side.</p>
+          <div class="chips"><span>Databases</span><span>App</span></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SKILLS ================= -->
+  <section id="skills">
+    <div class="container fade">
+      <h2>Skills</h2>
+      <p class="sub">What I work with.</p>
+
+      <div class="grid">
+        <div class="skill-box">
+          <h3>Languages</h3>
+          <div class="chips"><span>C</span><span>C++</span><span>Java</span></div>
+        </div>
+        <div class="skill-box">
+          <h3>Computer Science</h3>
+          <div class="chips"><span>Data Structures</span><span>Algorithms</span><span>Operating Systems</span><span>Discrete Maths</span><span>Linear Algebra</span></div>
+        </div>
+        <!-- EDIT: add more skill boxes by copying one of the boxes above -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section id="contact">
+    <div class="container fade">
+      <div class="contact-box">
+        <h2>Let's talk</h2>
+        <p>Have an idea, an internship, or a project to collaborate on? Send me a message.</p>
+        <!-- EDIT: replace with your real email address -->
+        <a class="btn primary" href="mailto:rsidharth432@gmail.com">Email me</a>
+        <!-- EDIT: replace with your real profile links -->
+        <a class="btn ghost" href="https://github.com/trahdiscode">GitHub</a>
+        <a class="btn ghost" href="https://www.linkedin.com/in/sidharth-r-573476390">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    <div class="container">
+      <span id="year"></span> TRAHDIS (Sidharth R). All rights reserved.
+    </div>
+  </footer>
+
+  <!-- ================= JAVASCRIPT ================= -->
+  <script>
+    // Part 1: put the current year into the footer automatically.
+    var yearSpot = document.getElementById("year");
+    yearSpot.textContent = "© " + new Date().getFullYear();
+
+    // Part 2: fade each section in when it scrolls into view.
+    var fadeItems = document.querySelectorAll(".fade");
+
+    var watcher = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
         }
+      });
+    });
 
-        function scrollToBottom() {
-            terminal.scrollTop = terminal.scrollHeight;
-        }
-
-        function addLine(text) {
-            const div = document.createElement('div');
-            div.className = 'line';
-            div.textContent = text;
-            terminal.insertBefore(div, activeLine);
-            scrollToBottom();
-        }
-
-        function handleCommand(raw) {
-            const cmd = raw.trim();
-            addLine('visitor@trahdis:~$ ' + cmd);
-            if (cmd === '') return;
-            const lower = cmd.toLowerCase();
-            if (lower === 'clear') {
-                document.querySelectorAll('.terminal > .line').forEach(el => el.remove());
-                return;
-            }
-            if (lower === 'joke') {
-                addLine(randomFrom(jokes));
-                return;
-            }
-            if (lower === 'hello' || lower === 'hi' || lower === 'hey') {
-                addLine(randomFrom(helloReplies));
-                return;
-            }
-            if (subdomainRedirects.hasOwnProperty(lower)) {
-                addLine('Redirecting to ' + subdomainRedirects[lower] + ' ...');
-                setTimeout(() => {
-                    window.location.href = subdomainRedirects[lower];
-                }, 600);
-                return;
-            }
-            if (responses.hasOwnProperty(lower)) {
-                addLine(responses[lower]);
-            } else {
-                addLine("command not found: " + cmd + " (try 'help')");
-            }
-        }
-
-        hiddenInput.addEventListener('input', () => {
-            typed.textContent = hiddenInput.value;
-            scrollToBottom();
-        });
-
-        hiddenInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                handleCommand(hiddenInput.value);
-                hiddenInput.value = '';
-                typed.textContent = '';
-            }
-        });
-
-        terminal.addEventListener('click', () => hiddenInput.focus());
-        hiddenInput.focus();
-    </script>
+    fadeItems.forEach(function (item) {
+      watcher.observe(item);
+    });
+  </script>
 
 </body>
 </html>
